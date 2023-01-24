@@ -8,6 +8,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2 
 
+    # TODO: Remove test Slack
+    - name: Notify Slack if failed
+      env: 
+        slack_webhook: ${{ secrets.SlackWebhook }}
+      run: >- 
+        curl -X POST --data-urlencode 'payload={"text": "This is a test"}' "$slack_webhook"
+
+    # TODO: Add step to install .NET to make sure have specific version (& Node and npm)
+
     - name: Build C# code
       run: dotnet build
 
@@ -29,3 +38,10 @@ jobs:
     - name: Run TypeScript tests
       working-directory: DotnetTemplate.Web
       run: npm t
+
+    # # TODO: Make this link to the actual action that has failed
+    # - name: Notify Slack if failed
+    #   env: 
+    #     slack_webhook: ${{ secrets.SlackWebhook }}
+    #   run: >- 
+    #     curl -X POST --data-urlencode 'payload={"text": "The <build pipeline|https://github.com/jackiewoodburn-sw/DevOps-Course-Workshop-Module-07-Learners/actions> has failed!"}' "$slack_webhook"
