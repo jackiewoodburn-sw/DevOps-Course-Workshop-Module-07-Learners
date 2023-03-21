@@ -34,16 +34,18 @@ Whilst it is helpful to be able to experiment locally, getting the app running i
 
 ![Mini app](img/mini-app.png)
 
+### Building and running Docker images
+
 ```bash
-docker build --target prod --tag exercise-9:prod .
-docker run -it --publish 8081:5000 exercise-9:prod
+docker build --target prod --tag jackiew104/dotnettemplate:prod .
+docker run -it --publish 8081:5000 jackiew104/dotnettemplate:prod
 
-docker build --target ts-tests --tag exercise-9:ts-tests .
-docker run -it exercise-9:ts-tests
+docker build --target ts-tests --tag jackiew104/dotnettemplate:ts-tests .
+docker run -it jackiew104/dotnettemplate:ts-tests
 
-docker build --target cs-tests --tag exercise-9:cs-tests .
-docker run -it exercise-9:cs-tests 
+docker build --target cs-tests --tag jackiew104/dotnettemplate:cs-tests .
+docker run -it jackiew104/dotnettemplate:cs-tests 
 
-docker build --target lint-tests --tag exercise-9:lint .
-docker run -it exercise-9:lint
+docker build --target lint-tests --tag jackiew104/dotnettemplate:lint .
+docker run -it jackiew104/dotnettemplate:lint
 ```
