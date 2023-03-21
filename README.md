@@ -33,3 +33,17 @@ Whilst it is helpful to be able to experiment locally, getting the app running i
 2. You can now see the website by going to [http://localhost:5000/](http://localhost:5000/). You should see something like the image below.
 
 ![Mini app](img/mini-app.png)
+
+```bash
+docker build --target prod --tag exercise-9:prod .
+docker run -it --publish 8081:5000 exercise-9:prod
+
+docker build --target ts-tests --tag exercise-9:ts-tests .
+docker run -it exercise-9:ts-tests
+
+docker build --target cs-tests --tag exercise-9:cs-tests .
+docker run -it exercise-9:cs-tests 
+
+docker build --target lint-tests --tag exercise-9:lint .
+docker run -it exercise-9:lint
+```
