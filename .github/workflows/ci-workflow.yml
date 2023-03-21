@@ -1,0 +1,68 @@
+name: CI/CD
+on: [push]                      
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest      
+    steps:
+    - uses: actions/checkout@v2 
+
+    # TODO: Remove test Slack
+    - name: Notify Slack if failed
+      env: 
+        slack_webhook: ${{ secrets.SlackWebhook }}
+      run: >- 
+        curl -X POST --data-urlencode 'payload={"text": "This is a test"}' "$slack_webhook"
+
+    # TODO: Add step to install .NET to make sure have specific version (& Node and npm)
+
+    - name: Build C# code
+      run: dotnet build
+
+    - name: Run the C# tests
+      run: dotnet test
+
+    - name: Install app dependencies
+      working-directory: DotnetTemplate.Web
+      run: npm install
+
+    - name: Build TypeScript code
+      working-directory: DotnetTemplate.Web
+      run: npm run build
+
+    - name: Run TypeScript linter
+      working-directory: DotnetTemplate.Web
+      run: npm run lint
+
+    - name: Run TypeScript tests
+      working-directory: DotnetTemplate.Web
+      run: npm t
+
+  docker:
+    name: Create and push Docker images
+    runs-on: ubuntu-latest      
+    needs: build
+    if: github.ref_name == 'main'
+    steps:
+    - uses: actions/checkout@v2
+    
+      # TODO: Add jackiew104 as env variable DOCKER_USERNAME
+
+    - name: Build Docker prod image
+      run: docker build --target prod --tag jackiew104/dotnettemplate:run__${{ github.ref_name }} .
+    
+    - name: Build Docker C# test image
+      run: docker build --target cs-tests --tag jackiew104/dotnettemplate:cs-tests__${{ github.ref_name }} .
+    
+    - name: Build Docker TypeScript test image
+      run: docker build --target ts-tests --tag jackiew104/dotnettemplate:ts-tests__${{ github.ref_name }} .
+    
+    - name: Build Docker linter test image
+      run: docker build --target lint-tests --tag jackiew104/dotnettemplate:lint__${{ github.ref_name }} .
+    
+    - name: Login to Dockerhub
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u jackiew104 --password-stdin
+
+    - name: Push all images to Dockerhub
+      run: docker image push -a jackiew104/dotnettemplate 

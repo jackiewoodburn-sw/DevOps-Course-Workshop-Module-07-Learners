@@ -33,3 +33,19 @@ Whilst it is helpful to be able to experiment locally, getting the app running i
 2. You can now see the website by going to [http://localhost:5000/](http://localhost:5000/). You should see something like the image below.
 
 ![Mini app](img/mini-app.png)
+
+### Building and running Docker images
+
+```bash
+docker build --target prod --tag jackiew104/dotnettemplate:prod .
+docker run -it --publish 8081:5000 jackiew104/dotnettemplate:prod
+
+docker build --target ts-tests --tag jackiew104/dotnettemplate:ts-tests .
+docker run -it jackiew104/dotnettemplate:ts-tests
+
+docker build --target cs-tests --tag jackiew104/dotnettemplate:cs-tests .
+docker run -it jackiew104/dotnettemplate:cs-tests 
+
+docker build --target lint-tests --tag jackiew104/dotnettemplate:lint .
+docker run -it jackiew104/dotnettemplate:lint
+```
