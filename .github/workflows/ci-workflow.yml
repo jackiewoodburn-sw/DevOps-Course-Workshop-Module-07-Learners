@@ -49,16 +49,16 @@ jobs:
       # TODO: Add jackiew104 as env variable DOCKER_USERNAME
 
     - name: Build Docker prod image
-      run: docker build --target prod --tag jackiew104/dotnettemplate:prod .
+      run: docker build --target prod --tag jackiew104/dotnettemplate:run-${{ github.ref_name }} .
     
     - name: Build Docker C# test image
-      run: docker build --target cs-tests --tag jackiew104/dotnettemplate:cs-tests .
+      run: docker build --target cs-tests --tag jackiew104/dotnettemplate:cs-tests-${{ github.ref_name }} .
     
     - name: Build Docker TypeScript test image
-      run: docker build --target ts-tests --tag jackiew104/dotnettemplate:ts-tests .
+      run: docker build --target ts-tests --tag jackiew104/dotnettemplate:ts-tests-${{ github.ref_name }} .
     
     - name: Build Docker linter test image
-      run: docker build --target lint-tests --tag jackiew104/dotnettemplate:lint .
+      run: docker build --target lint-tests --tag jackiew104/dotnettemplate:lint-${{ github.ref_name }} .
     
     - name: Login to Dockerhub
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u jackiew104 --password-stdin
