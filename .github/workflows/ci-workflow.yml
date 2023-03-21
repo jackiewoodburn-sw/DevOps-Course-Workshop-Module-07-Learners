@@ -39,6 +39,13 @@ jobs:
       working-directory: DotnetTemplate.Web
       run: npm t
 
+  docker:
+    name: Create and push Docker images
+    runs-on: ubuntu-latest      
+    needs: build
+    steps:
+    - uses: actions/checkout@v2 
+    
       # TODO: Add jackiew104 as env variable DOCKER_USERNAME
 
     - name: Build Docker prod image
