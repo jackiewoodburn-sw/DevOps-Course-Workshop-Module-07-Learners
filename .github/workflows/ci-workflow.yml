@@ -73,7 +73,5 @@ jobs:
     needs: [build, docker]
     if: github.ref_name == 'main'
     steps:
-    - uses: actions/checkout@v2
-
     - name: Call deployment webhook
       run: curl -dH -X POST "https://\$dotnettemplate-jsw:${{ secrets.AZURE_WEBHOOK_DEPLOYMENT_PASSWORD }}@dotnettemplate-jsw.scm.azurewebsites.net/api/registry/webhook" --fail
